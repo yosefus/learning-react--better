@@ -1,23 +1,18 @@
-import { useState } from 'react';
-import { getMovies } from './../services/fakeMovieService';
+import React from 'react';
 
-function Movies() {
-  const [movies, setMovies] = useState(getMovies());
+import { HeartLike } from './../';
 
-  const deleteMovie = (id) => {
-    setMovies(movies.filter((movieTemp) => movieTemp._id !== id));
-  };
-
-  const { length } = movies;
-  const moviesLengthMsg = `there is ${length} movies in the stock right now`;
-  const noMoviesMsg = 'there is no movies yet';
+function MoviesTable(props) {
+  const { length, currentMovies, deleteMovie, handleLike } = props;
 
   return (
-    <div className="container">
-      <h2 className="text-center p-2">{length > 0 ? moviesLengthMsg : noMoviesMsg}</h2>
+    <>
+      <h2 className="text-center p-2">
+        {length > 0 ? `there is ${length} movies in the stock right now` : 'there is no movies yet'}
+      </h2>
       {length > 0 && (
         <table className="table">
-          <thead>
+          <thead className="table-dark">
             <tr>
               <th scope="col">title</th>
               <th scope="col">number In Stock</th>
@@ -26,9 +21,11 @@ function Movies() {
               <th scope="col">action</th>
             </tr>
           </thead>
+
           <tbody>
-            {movies.map((movie) => {
-              const { _id, title, numberInStock, genre, dailyRentalRate } = movie;
+            {currentMovies.map((movie) => {
+              const { _id, title, numberInStock, genre, dailyRentalRate, liked } = movie;
+
               return (
                 <tr key={_id}>
                   <th scope="row">{title}</th>
@@ -36,9 +33,10 @@ function Movies() {
                   <td>{genre['name']}</td>
                   <td>{dailyRentalRate}</td>
                   <td>
-                    <button onClick={() => deleteMovie(_id)} className="btn btn-danger btn-sm">
+                    <button onClick={() => deleteMovie(_id)} className="btn  btn-danger btn-sm">
                       Delete
                     </button>
+                    <HeartLike onClick={() => handleLike(movie)} like={liked} />
                   </td>
                 </tr>
               );
@@ -46,8 +44,8 @@ function Movies() {
           </tbody>
         </table>
       )}
-    </div>
+    </>
   );
 }
 
-export default Movies;
+export default MoviesTable;

@@ -1,4 +1,4 @@
-import { Counter } from './';
+import { Counter } from '../';
 
 function Counters(props) {
   const { Items, onChange, onDelete, onReset } = props;
